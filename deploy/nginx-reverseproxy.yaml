@@ -1,4 +1,3 @@
-#nginx-reverseproxy.yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -6,7 +5,7 @@ metadata:
 spec:
  selector:
     app:  nginx-reverseproxy
- type: LoadBalancer  #LB to expose the service and get an external IP address
+ type: LoadBalancer
  ports:
   - name: http
     port: 80
@@ -45,15 +44,13 @@ metadata:
 data:
   default.conf: |-
     server {
-     server_name yourhostname.com;
-     listen 80;
-     #deny access to .htaccess files, if Apache's document root
-     #concurs with nginx's one
-     #
-     location ~ /\.ht {
+      server_name yourhostname.com;
+       listen 80;
+       # Deny access to .htaccess files, if Apache's document root concurs with nginx's one
+       location ~ /\.ht {
          deny  all;
-     }
-location / {
+       }
+       location / {
          proxy_pass http://nodejs-service:8080; #this is the service described in nodejs.yaml
-     }
+       }
     }
